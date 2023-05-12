@@ -38,7 +38,7 @@ namespace Template
          * 
          * MacOS doesn't support prehistoric OpenGL anymore since 2018.
          */
-        public const bool allowPrehistoricOpenGL = false;
+        public const bool allowPrehistoricOpenGL = true;
 
         int screenID;            // unique integer identifier of the OpenGL texture
         MyApplication? app;      // instance of the application

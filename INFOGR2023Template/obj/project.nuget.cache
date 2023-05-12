@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bDNtF16qRO1gAEIqFPLghkstGOeq8G/4uyIxcsMmXUnKSwPAONcQhyWmQWif8zrVrs/KfQmemf74W2w+4ONz9A==",
+  "dgSpecHash": "cmCLclp6JR630I5Vw2SFA7QsPzrnu9YuE9pkmbDcnY+eYLmyfAgiLdePhRsk9tg7wY/ne5i/4qE/BWsZFgYyoQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\steij\\source\\repos\\INFOGR2023Template\\INFOGR2023Template.csproj",
+  "projectFilePath": "C:\\Users\\steij\\GraphicsPO\\GraphicsP1\\INFOGR2023Template\\INFOGR2023Template.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\steij\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\steij\\.nuget\\packages\\opentk\\4.7.1\\opentk.4.7.1.nupkg.sha512",
