@@ -9,23 +9,34 @@ namespace INFOGR2023Template
 {
     internal class Primitive
     {
-        Vector3 position = new Vector3();
-        Vector3 direction = new Vector3();
+        public Vector3 position;
+        public float radius;
+        public Vector3 normal;
+        public Vector3 color;
 
-        public Primitive(Vector3 _position, Vector3 _direction) 
+        public Primitive(Vector3 _position) 
         {
             position = _position;
-            direction = _direction;
         }
 
-        public void Sphere()
-        {
 
+    }
+
+    internal class Sphere : Primitive
+    {
+        public Sphere(Vector3 _position, float _radius) : base(_position)
+        {
+            radius = _radius;
         }
+    }
 
-        public void Plane()
+    internal class Plane : Primitive
+    {
+        Vector3 direction;
+        public Plane(Vector3 _position, Vector3 _direction, Vector3 _normal) : base(_position)
         {
-
+            normal = _normal;
+            direction = _direction; 
         }
     }
 }
