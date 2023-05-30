@@ -28,3 +28,11 @@ C:\Users\steij\source\repos\INFOGR2023Template\obj\Debug\net6.0\refint\INFOGR202
 C:\Users\steij\source\repos\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.pdb
 C:\Users\steij\source\repos\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.genruntimeconfig.cache
 C:\Users\steij\source\repos\INFOGR2023Template\obj\Debug\net6.0\ref\INFOGR2023Template.dll
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.csproj.AssemblyReference.cache
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.AssemblyInfoInputs.cache
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.AssemblyInfo.cs
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.csproj.CoreCompileInputs.cache
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.dll
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\refint\INFOGR2023Template.dll
+C:\Users\steij\GraphicsPO\GraphicsP1\INFOGR2023Template\obj\Debug\net6.0\INFOGR2023Template.pdb

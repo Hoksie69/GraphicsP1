@@ -9,7 +9,7 @@ public class Light
     int B;
 
     Vector3 location;
-    float[] intensity = new float[] { R, G, B };
+    float[] intensity = new float[] {};
 
     public Light(Vector3 _location, float[] intensity)
     {
