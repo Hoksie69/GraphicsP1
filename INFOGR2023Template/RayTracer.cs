@@ -26,26 +26,27 @@ namespace INFOGR2023Template
 
         public void Render()
         {
-            for(int x = 0; x < screen.width; x++)
+            for(float x = 0; x < screen.width; x++)
             {
-                for (int y = 0; y < screen.height; y++)
+                for (float y = 0; y < screen.height; y++)
                 {
                     Vector3 pointOnPlane = camera.screenPlane[0] + (x / screen.width) * cameraPlaneBasisU + (y / screen.height) * cameraPlaneBasisV;
                     Vector3 rayDirection = pointOnPlane - camera.position;
                     rayDirection.Normalize();
 
-                    TraceRay(rayDirection);
+                    Intersection tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
+                    if(tempIntersection != null) 
+                    {
+                        screen.Plot((int)x, (int)y, GetColor((int)tempIntersection.victim.color.X, (int)tempIntersection.victim.color.Y, (int)tempIntersection.victim.color.Z));
+                    }  
                 }
             }
         }
 
-        public void TraceRay(Vector3 rayDirection)
+        public int GetColor(int R, int G, int B)
         {
-            Vector3 ray;
-            ray = camera.position + rayDirection;
-            scene.Intersection(ray);
-            }
+            return (R << 16) + (G <<8) + B;
         }
-    }
 
+    }
 }

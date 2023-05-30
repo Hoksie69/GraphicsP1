@@ -1,4 +1,5 @@
 ﻿using OpenTK.Mathematics;
+using SixLabors.ImageSharp.ColorSpaces.Conversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,17 +15,16 @@ namespace INFOGR2023Template
         public Vector3 normal;
         public Vector3 color;
 
-        public Primitive(Vector3 _position) 
+        public Primitive(Vector3 _position, Vector3 _color) 
         {
             position = _position;
+            color = _color;
         }
-
-
     }
 
     internal class Sphere : Primitive
     {
-        public Sphere(Vector3 _position, float _radius) : base(_position)
+        public Sphere(Vector3 _position, Vector3 _color, float _radius) : base(_position, _color)
         {
             radius = _radius;
         }
@@ -32,8 +32,8 @@ namespace INFOGR2023Template
 
     internal class Plane : Primitive
     {
-        Vector3 direction;
-        public Plane(Vector3 _position, Vector3 _direction, Vector3 _normal) : base(_position)
+        float direction;
+        public Plane(Vector3 _position, Vector3 _color, float _direction, Vector3 _normal) : base(_position, _color)
         {
             normal = _normal;
             direction = _direction; 
