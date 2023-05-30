@@ -10,48 +10,33 @@ namespace INFOGR2023Template
 {
     internal class Primitive
     {
-        Vector3 position = new Vector3();
-        Vector3 direction = new Vector3();
+        public Vector3 position;
+        public float radius;
+        public Vector3 normal;
+        public Vector3 color;
 
-        public Primitive(Vector3 _position) 
+        public Primitive(Vector3 _position, Vector3 _color) 
         {
             position = _position;
+            color = _color;
         }
+    }
 
-        public void Sphere(float radius)
+    internal class Sphere : Primitive
+    {
+        public Sphere(Vector3 _position, Vector3 _color, float _radius) : base(_position, _color)
         {
-            float x, y, z, xy;
-            float nx, ny, nz, lengthInv = 1.0f / radius;
-
-            int sectorAmount = 36;
-            int stackAmount = 18;
-
-            float sectorStep = (float)(2 * Math.PI / sectorAmount);
-            float stackStep = (float)(Math.PI / stackAmount);
-            float sectorAngle, stackAngle;
-
-            for (int i = 0; i < sectorAmount; i++)
-            {
-                stackAngle = (float)(Math.PI / 2 - i * stackStep);
-                xy = (float)(radius * Math.Cos(stackAngle));
-                z = (float)(radius * Math.Sin(stackAngle));
-
-                for (int j = 0; j < stackAmount; j++)
-                {
-                    sectorAngle = j * sectorStep;
-
-                    x = (float)(xy * Math.Cos(sectorAngle));
-                    y = (float)(xy * Math.Cos(sectorAngle));
-                    vertices.push_back(x);
-                    vertices.push_back(y);
-                    vertices.push_back(z);
-                }
-            }
+            radius = _radius;
         }
+    }
 
-        public void Plane(Vector3 direction)
+    internal class Plane : Primitive
+    {
+        Vector3 direction;
+        public Plane(Vector3 _position, Vector3 _color, Vector3 _direction, Vector3 _normal) : base(_position, _color)
         {
-
+            normal = _normal;
+            direction = _direction; 
         }
     }
 }

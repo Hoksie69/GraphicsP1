@@ -9,11 +9,11 @@ namespace INFOGR2023Template
 {
     internal class Intersection
     {
-        Vector3 distance;
-        Primitive victim;
-        Vector3 normal;
+        public float distance;
+        public Primitive victim;
+        public Vector3 normal;
 
-        public Intersection(Vector3 _distance, Primitive _victim, Vector3 _normal)
+        public Intersection(float _distance, Primitive _victim, Vector3 _normal)
         {
             distance = _distance;
             victim = _victim;

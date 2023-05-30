@@ -4,14 +4,12 @@ using OpenTK.Mathematics;
 
 public class Light
 {
-    int R;
-    int G;
-    int B;
-
     Vector3 location;
-    float[] intensity = new float[] {};
+    Vector3 intensity;
 
-    public Light(Vector3 _location, float[] intensity)
+    public Light(Vector3 _location, Vector3 _intensity)
     {
+        location = _location;
+        intensity = _intensity;
     }
 }
