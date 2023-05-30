@@ -41,15 +41,9 @@ namespace INFOGR2023Template
 
         public void TraceRay(Vector3 rayDirection)
         {
-            int t = 1;
             Vector3 ray;
-            while(t < 100)
-            {
-                ray = camera.position + t * rayDirection;
-                if (scene.Intersection(ray))
-                {
-
-                }
+            ray = camera.position + rayDirection;
+            scene.Intersection(ray);
             }
         }
     }

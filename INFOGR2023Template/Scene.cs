@@ -18,22 +18,20 @@ namespace INFOGR2023Template
             //lightsList.Add(new Light(new Vector3(1, 1, 0), new Vector3(256, 256, 256)));
         }
 
-        public bool Intersection(Vector3 ray)
+        public void Intersection(Vector3 ray)
         {
             foreach(Primitive primitive in primitivesList)
             {
                 if(primitive is Sphere)
                 {
-                    return true;
+                    (ray.X) 
                 }
 
                 if(primitive is Plane)
                 {
-                    return true;
                 }
                 
             }
-            return false;
         }
     }
 }
