@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
+
+//Goeie gedachte (volgens 
 
 namespace INFOGR2023Template
 {
@@ -13,6 +16,7 @@ namespace INFOGR2023Template
         public List<Light> lightsList = new List<Light>();
         List<Intersection> intersections;
         Vector3 testVector;
+
 
         public Scene()
         {
@@ -30,7 +34,8 @@ namespace INFOGR2023Template
         {
             intersections = new List<Intersection>();
             intersections.Clear();
-            foreach (Primitive primitive in primitivesList)
+
+            foreach(Primitive primitive in primitivesList)
             {
                 if (primitive is Sphere)
                 {
@@ -50,13 +55,12 @@ namespace INFOGR2023Template
                             if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
                             {
                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
+                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));                           
                             }
                             else
                             {
                                 Vector3 normal = (origin + t2 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin + t2 * direction));
-                            }
+                            }                            
                         }
                         else
                         {
