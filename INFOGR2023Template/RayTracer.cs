@@ -60,7 +60,6 @@ namespace INFOGR2023Template
                 {
                     return victim.color;
                 }   
-                else return new Vector3(0, 0, 0); 
             }
             return new Vector3(0, 0, 0);
         }
