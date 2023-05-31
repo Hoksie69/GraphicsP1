@@ -26,10 +26,9 @@ namespace INFOGR2023Template
 
         public void Render()
         {
-            Intersection tempIntersection;
-            for(int x = 0; x < screen.width; x++)
+            for(float x = 0; x < screen.width; x++)
             {
-                for (int y = 0; y < screen.height; y++)
+                for (float y = 0; y < screen.height; y++)
                 {
                     Vector3 pointOnPlane = camera.screenPlane[0] + (x / screen.width) * cameraPlaneBasisU + (y / screen.height) * cameraPlaneBasisV;
                     Vector3 rayDirection = pointOnPlane - camera.position;
@@ -38,7 +37,7 @@ namespace INFOGR2023Template
                     tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
                     if(tempIntersection != null) 
                     {
-                        screen.Plot(x, y, GetColor((int)tempIntersection.victim.color.X, (int)tempIntersection.victim.color.Y, (int)tempIntersection.victim.color.Z));
+                        screen.Plot((int)x, (int)y, GetColor((int)tempIntersection.victim.color.X, (int)tempIntersection.victim.color.Y, (int)tempIntersection.victim.color.Z));
                     }  
                 }
             }

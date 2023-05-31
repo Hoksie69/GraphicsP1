@@ -32,8 +32,8 @@ namespace INFOGR2023Template
 
     internal class Plane : Primitive
     {
-        Vector3 direction;
-        public Plane(Vector3 _position, Vector3 _color, Vector3 _direction, Vector3 _normal) : base(_position, _color)
+        float direction;
+        public Plane(Vector3 _position, Vector3 _color, float _direction, Vector3 _normal) : base(_position, _color)
         {
             normal = _normal;
             direction = _direction; 
