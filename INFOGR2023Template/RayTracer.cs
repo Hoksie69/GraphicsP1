@@ -12,10 +12,13 @@ namespace INFOGR2023Template
     internal class RayTracer
     {        
         Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
-        Scene scene = new Scene();
+        public Scene scene = new Scene();
         Surface screen;
         Vector3 cameraPlaneBasisU;
         Vector3 cameraPlaneBasisV;
+
+        public Vector3 CamPos { get { return camera.position; } }
+        public Vector3[] CamPlane { get { return camera.screenPlane; } }
         
         public RayTracer(Surface _screen)
         {
@@ -33,33 +36,22 @@ namespace INFOGR2023Template
                     Vector3 pointOnPlane = camera.screenPlane[0] + (x / screen.width) * cameraPlaneBasisU + (y / screen.height) * cameraPlaneBasisV;
                     Vector3 rayDirection = pointOnPlane - camera.position;
                     rayDirection.Normalize();
-
+                    
                     Intersection tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
                     if(tempIntersection != null) 
                     {
                         Vector3 tempColor = GetShadow(tempIntersection.victim, tempIntersection.intersectionPoint);
                         screen.Plot((int)x, (int)y, GetColor((int)tempColor.X, (int)tempColor.Y, (int)tempColor.Z));
+                        if(y == 200 && x % 10 == 0)
+                            Debug.rayList.Add((new Vector2(camera.position.X, camera.position.Z), new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z)));
                     }
                     else
                     {
                         screen.Plot((int)x, (int)y, GetColor(200,200,200));
+                        if(y == 200 && x % 10 == 0)
+                            Debug.rayList.Add((new Vector2(camera.position.X, camera.position.Z), new Vector2(camera.position.X + rayDirection.X * 20, camera.position.Z + rayDirection.Z * 20)));
+
                     }
-                }
-            }
-        }
-
-        public void Debug()
-        {
-            float scaleX = 1 / 16 * screen.width / 2;
-            float scaleY = 1 / 10 * screen.height / 2;
-
-            for(int x = 0; x < 16; x++)
-            {
-                for(int z = 10; z > 0; z--)
-                {
-                    screen.Plot((int)camera.position.X, (int)camera.position.Z, GetColor(255, 255, 255));
-                    //screen.Plot((int)debugCamPos.X, (int)debugCamPos.Y, GetColor(255, 255, 0));
-                    //screen.Line((int)planePos1.X, (int)planePos1.Y, (int)planePos2.X, (int)planePos2.Y, GetColor(255,255,255));
                 }
             }
         }
@@ -84,6 +76,5 @@ namespace INFOGR2023Template
         {
             return (R << 16) + (G <<8) + B;
         }
-
     }
 }

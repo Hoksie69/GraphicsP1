@@ -20,10 +20,10 @@ namespace INFOGR2023Template
 
         public Scene()
         {
-            primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(7, 0, 1), new Vector3(255, 255, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(255, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 255, 0), 1));
+            primitivesList.Add(new Sphere(new Vector3(3, 6, 2), new Vector3(0, 0, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(7, 10, 1), new Vector3(255, 255, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 3, -2), new Vector3(255, 0, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(2, 0, -1), new Vector3(0, 255, 0), 1));
             testVector = new Vector3(0, 1, 0);
             testVector.Normalize();
             primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(100, 100, 100), new Vector3(5, 5, 0), testVector));

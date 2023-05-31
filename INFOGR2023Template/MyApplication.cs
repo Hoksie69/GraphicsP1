@@ -7,12 +7,13 @@ namespace Template
 {
     class MyApplication
     {
-        bool debugMode = false;
+        bool debugMode = true;
 
         // member variables
         public Surface screen;
         public RayTracer rayTracer;
         GameWindow window;
+        public Debug debug;
         // constructor
         public MyApplication(Surface screen, OpenTKApp window)
         {
@@ -23,15 +24,16 @@ namespace Template
         public void Init()
         {
             rayTracer = new RayTracer(screen);
+            debug = new Debug(screen, rayTracer);
         }
         // tick: renders one frame
         public void Tick()
         {
 
-            if (window.IsKeyPressed(Keys.LeftAlt))
-            {
+            if (window.IsKeyDown(Keys.LeftAlt) && debugMode == false)
                 debugMode = !debugMode;
-            }
+            if (window.IsKeyDown(Keys.Backspace) && debugMode == true)
+                debugMode = !debugMode;
 
             screen.Clear(0);
             if (!debugMode)
@@ -40,7 +42,7 @@ namespace Template
             }
             else
             {
-                rayTracer.Debug();
+                debug.DebugOutput();
             }
         }
     }
