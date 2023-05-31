@@ -12,15 +12,18 @@ namespace INFOGR2023Template
         public List<Primitive> primitivesList = new List<Primitive>();
         public List<Light> lightsList = new List<Light>();
         List<Intersection> intersections;
+        Vector3 testVector;
 
         public Scene()
         {
-            primitivesList.Add(new Sphere(new Vector3(10, 0, 1), new Vector3(0, 255, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0, 0, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(7, 0, 1), new Vector3(255, 255, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(255, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 255, 0), 1));
-            lightsList.Add(new Light(new Vector3(5, 5, 0), new Vector3(255, 255, 255)));
+            primitivesList.Add(new Sphere(new Vector3(10,0, -1), new Vector3(0, 255, 0), 1));
+            testVector = new Vector3(0, 1, 0);
+            testVector.Normalize();
+            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(100, 100, 100), new Vector3(5,5,0), testVector));
+            lightsList.Add(new Light(new Vector3(5, 6, 0), new Vector3(255, 255, 255)));
         }
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)
@@ -62,16 +65,17 @@ namespace INFOGR2023Template
                         }
 
                     }
-                }
+                } 
                 if (primitive is Plane)
                 {
-                    float A = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z;
-                    float B = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
-                    if (B != 0 && B < 0)
+                    float B = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z - primitive.position.X * primitive.normal.X - primitive.position.Y * primitive.normal.Y - primitive.position.Z * primitive.normal.Z;
+                    float A = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
+                    if (A != 0 && A < 0)
                     {
-                        float t = (-A) / B;
-                        Vector3 normal = (origin + t * direction) - primitive.position;
-                        intersections.Add(new Intersection(((origin + t * direction).Length), primitive, normal, origin + t * direction));
+                        float t = (-B) / A;
+                        
+                            Vector3 normal = (origin + t * direction) - primitive.position;
+                            intersections.Add(new Intersection(((origin + t * direction).Length), primitive, normal, origin + t * direction));
                     }
                 }
             }
@@ -99,18 +103,20 @@ namespace INFOGR2023Template
                         }
                     }
                 }
-
-                if (primitive is Plane)
+                
+                if(primitive is Plane)
                 {
-                    float A = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z;
-                    float B = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
-                    if (B != 0 && B < 0)
+                    float B = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z - primitive.position.X * primitive.normal.X - primitive.position.Y * primitive.normal.Y - primitive.position.Z * primitive.normal.Z;
+                    float A = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
+                    if (A != 0 && A < 0)
                     {
-                        float t = (-A) / B;
-                        return true;
-                    }
+                        float t = (-B) / A;
+                        if (t > 0.001f && t < (direction * t - origin).Length - 0.001f)
+                        {
+                            return true;
+                        }
 
-                    return false;
+                    }
                 }
             }
 
