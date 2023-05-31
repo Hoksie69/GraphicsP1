@@ -37,10 +37,32 @@ namespace INFOGR2023Template
                     Intersection tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
                     if(tempIntersection != null) 
                     {
-                        screen.Plot((int)x, (int)y, GetColor((int)tempIntersection.victim.color.X, (int)tempIntersection.victim.color.Y, (int)tempIntersection.victim.color.Z));
-                    }  
+                        Vector3 tempColor = GetShadow(tempIntersection.victim, tempIntersection.intersectionPoint);
+                        screen.Plot((int)x, (int)y, GetColor((int)tempColor.X, (int)tempColor.Y, (int)tempColor.Z));
+                    }
+                    else
+                    {
+                        screen.Plot((int)x, (int)y, GetColor(200,200,200));
+                    }
                 }
             }
+        }
+
+        public Vector3 GetShadow(Primitive victim, Vector3 intersectionPoint)
+        {
+            foreach (Light l in scene.lightsList)
+            {
+
+                Vector3 shadowRayDirection = l.location - intersectionPoint;
+                shadowRayDirection.Normalize();
+
+                if (!scene.ShadowIntersection(intersectionPoint, shadowRayDirection, victim))
+                {
+                    return victim.color;
+                }   
+                else return new Vector3(0, 0, 0); 
+            }
+            return new Vector3(0, 0, 0);
         }
 
         public int GetColor(int R, int G, int B)
