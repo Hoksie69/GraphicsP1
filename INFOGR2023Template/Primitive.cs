@@ -14,6 +14,7 @@ namespace INFOGR2023Template
         public float radius;
         public Vector3 normal;
         public Vector3 color;
+        public Vector3 direction;
 
         public Primitive(Vector3 _position, Vector3 _color) 
         {
@@ -32,8 +33,7 @@ namespace INFOGR2023Template
 
     internal class Plane : Primitive
     {
-        float direction;
-        public Plane(Vector3 _position, Vector3 _color, float _direction, Vector3 _normal) : base(_position, _color)
+        public Plane(Vector3 _position, Vector3 _color, Vector3 _direction, Vector3 _normal) : base(_position, _color)
         {
             normal = _normal;
             direction = _direction; 
