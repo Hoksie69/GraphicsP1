@@ -12,12 +12,14 @@ namespace INFOGR2023Template
         public float distance;
         public Primitive victim;
         public Vector3 normal;
+        public Vector3 intersectionPoint;
 
-        public Intersection(float _distance, Primitive _victim, Vector3 _normal)
+        public Intersection(float _distance, Primitive _victim, Vector3 _normal, Vector3 _intersectionPoint)
         {
             distance = _distance;
             victim = _victim;
             normal = _normal;
+            intersectionPoint = _intersectionPoint;
         }
     }
 }

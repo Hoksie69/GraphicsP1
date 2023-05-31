@@ -14,45 +14,49 @@ namespace INFOGR2023Template
     {
         public List<Primitive> primitivesList = new List<Primitive>();
         public List<Light> lightsList = new List<Light>();
+        List<Intersection> intersections;
         public List<Intersection> tempIntersectionList;
 
 
         public Scene()
         {
             primitivesList.Add(new Sphere(new Vector3(10, 0, 1), new Vector3(0, 255, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0,0,255), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0, 0, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(7, 0, 1), new Vector3(255, 255, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(255, 0, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 255, 0), 1));
-            //primitivesList.Add(new Plane(new Vector3(0, -1, -1), new Vector3(100, 100, 100), 10, new Vector3(0, 1, 0)));
-            lightsList.Add(new Light(new Vector3(1, 1, 1), new Vector3(256, 256, 256)));
-        }   
+            lightsList.Add(new Light(new Vector3(5, 5, 0), new Vector3(255, 255, 255)));
+        }
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)
         {
+            intersections = new List<Intersection>();
+            intersections.Clear();
+            foreach (Primitive primitive in primitivesList)
             tempIntersectionList = new List<Intersection>();
             tempIntersectionList.Clear();
 
             foreach(Primitive primitive in primitivesList)
             {
-                if(primitive is Sphere)
+                if (primitive is Sphere)
                 {
                     float abcA = (direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
                     float abcB = (2 * origin.X * direction.X + 2 * origin.Y * direction.Y + 2 * origin.Z * direction.Z - 2 * direction.X * primitive.position.X - 2 * direction.Y * primitive.position.Y - 2 * direction.Z * primitive.position.Z);
-                    float abcC = (origin.X * origin.X + origin.Y * origin.Y + origin.Z * origin.Z + primitive.position.X * primitive.position.X + primitive.position.Y * primitive.position.Y + primitive.position.Z * primitive.position.Z - 2 * origin.X * primitive.position.X - 2 * origin.Y * primitive.position.Y - 2 * origin.Z * primitive.position.Z - primitive.radius * primitive.radius); 
+                    float abcC = (origin.X * origin.X + origin.Y * origin.Y + origin.Z * origin.Z + primitive.position.X * primitive.position.X + primitive.position.Y * primitive.position.Y + primitive.position.Z * primitive.position.Z - 2 * origin.X * primitive.position.X - 2 * origin.Y * primitive.position.Y - 2 * origin.Z * primitive.position.Z - primitive.radius * primitive.radius);
                     float abcD = (float)(abcB * abcB - 4 * abcA * abcC);
                     if (abcA == 0)
                         return null;
-                    if (abcD > 0)
+                    if (abcD >= 0)
                     {
                         float t1 = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
                         float t2 = (float)(-abcB - Math.Sqrt(abcD)) / (2 * abcA);
 
-                        if(t1 != t2)
+                        if (t1 != t2)
                         {
-                            if((origin + t1 * direction).Length < (origin + t2 * direction).Length)
+                            if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
                             {
                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
+                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
                                 tempIntersectionList.Add(new Intersection((origin + t1 * direction).Length, primitive, normal));
                                 //return new Intersection(((origin + t1 * direction).Length), primitive, normal);
                             }
@@ -66,26 +70,64 @@ namespace INFOGR2023Template
                         else
                         {
                             Vector3 normal = (origin + t1 * direction) - primitive.position;
-                            //return new Intersection(((origin + t1 * direction).Length), primitive, normal);
+                            intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
                         }
-                        //return null;
+
                     }
                 }
-
-                if(primitive is Plane)
+                if (primitive is Plane)
                 {
                     float A = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z;
                     float B = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
-                    if(B != 0 && B < 0)
+                    if (B != 0 && B < 0)
                     {
                         float t = (-A) / B;
                         Vector3 normal = (origin + t * direction) - primitive.position;
-                        tempIntersectionList.Add(new Intersection((origin + t * direction).Length, primitive, normal));
-                        //return new Intersection(((origin + t * direction).Length), primitive, normal);
+                        intersections.Add(new Intersection(((origin + t * direction).Length), primitive, normal, origin + t * direction));
                     }
                 }
             }
-            return tempIntersectionList.MinBy(test => test.distance);
+
+            return intersections.MinBy(test => test.distance);
+        }
+
+        public bool ShadowIntersection(Vector3 origin, Vector3 direction, Primitive victim)
+        {
+            foreach (Primitive primitive in primitivesList)
+            {
+                if (primitive is Sphere)
+                {
+                    float abcA = (direction.X * direction.X + direction.Y * direction.Y + direction.Z * direction.Z);
+                    float abcB = (2 * origin.X * direction.X + 2 * origin.Y * direction.Y + 2 * origin.Z * direction.Z - 2 * direction.X * primitive.position.X - 2 * direction.Y * primitive.position.Y - 2 * direction.Z * primitive.position.Z);
+                    float abcC = (origin.X * origin.X + origin.Y * origin.Y + origin.Z * origin.Z + primitive.position.X * primitive.position.X + primitive.position.Y * primitive.position.Y + primitive.position.Z * primitive.position.Z - 2 * origin.X * primitive.position.X - 2 * origin.Y * primitive.position.Y - 2 * origin.Z * primitive.position.Z - primitive.radius * primitive.radius);
+                    float abcD = (float)(abcB * abcB - 4 * abcA * abcC);
+                    //Console.WriteLine(abcD); 
+                    if (abcD >= 0)
+                    {
+                        float t = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
+
+                        if (t > 0.001f && t < (direction * t - origin).Length - 0.001f){
+                            return true;
+                        }
+                    }
+                }
+
+                if (primitive is Plane)
+                {
+                    float A = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z;
+                    float B = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
+                    if (B != 0 && B < 0)
+                    {
+                        float t = (-A) / B;
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            return false;
         }
     }
 }
+

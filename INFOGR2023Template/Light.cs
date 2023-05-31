@@ -4,8 +4,8 @@ using OpenTK.Mathematics;
 
 public class Light
 {
-    Vector3 location;
-    Vector3 intensity;
+    public Vector3 location;
+    public Vector3 intensity;
 
     public Light(Vector3 _location, Vector3 _intensity)
     {
