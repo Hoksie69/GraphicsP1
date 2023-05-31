@@ -32,9 +32,6 @@ namespace INFOGR2023Template
         {
             intersections = new List<Intersection>();
             intersections.Clear();
-            foreach (Primitive primitive in primitivesList)
-            tempIntersectionList = new List<Intersection>();
-            tempIntersectionList.Clear();
 
             foreach(Primitive primitive in primitivesList)
             {
@@ -57,13 +54,13 @@ namespace INFOGR2023Template
                             {
                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
                                 intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
-                                tempIntersectionList.Add(new Intersection((origin + t1 * direction).Length, primitive, normal));
+                                tempIntersectionList.Add(new Intersection((origin + t1 * direction).Length, primitive, normal, origin + t1 * direction));
                                 //return new Intersection(((origin + t1 * direction).Length), primitive, normal);
                             }
                             else
                             {
                                 Vector3 normal = (origin + t2 * direction) - primitive.position;
-                                tempIntersectionList.Add(new Intersection((origin + t2 * direction).Length, primitive, normal));
+                                intersections.Add(new Intersection((origin + t2 * direction).Length, primitive, normal, origin + t2 * direction));
                                 //return new Intersection(((origin + t2 * direction).Length), primitive, normal);
                             }                            
                         }

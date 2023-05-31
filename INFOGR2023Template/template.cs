@@ -76,7 +76,7 @@ namespace Template
             GL.ClearColor(0, 0, 0, 0);
             GL.Disable(EnableCap.DepthTest);
             Surface screen = new(ClientSize.X, ClientSize.Y);
-            app = new MyApplication(screen);
+            app = new MyApplication(screen, this);
             screenID = app.screen.GenTexture();
             if (allowPrehistoricOpenGL)
             {

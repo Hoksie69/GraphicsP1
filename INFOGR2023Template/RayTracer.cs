@@ -10,7 +10,7 @@ using SixLabors.ImageSharp;
 namespace INFOGR2023Template
 {
     internal class RayTracer
-    {
+    {        
         Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
         Scene scene = new Scene();
         Surface screen;
@@ -44,6 +44,22 @@ namespace INFOGR2023Template
                     {
                         screen.Plot((int)x, (int)y, GetColor(200,200,200));
                     }
+                }
+            }
+        }
+
+        public void Debug()
+        {
+            float scaleX = 1 / 16 * screen.width / 2;
+            float scaleY = 1 / 10 * screen.height / 2;
+
+            for(int x = 0; x < 16; x++)
+            {
+                for(int z = 10; z > 0; z--)
+                {
+                    screen.Plot((int)camera.position.X, (int)camera.position.Z, GetColor(255, 255, 255));
+                    //screen.Plot((int)debugCamPos.X, (int)debugCamPos.Y, GetColor(255, 255, 0));
+                    //screen.Line((int)planePos1.X, (int)planePos1.Y, (int)planePos2.X, (int)planePos2.Y, GetColor(255,255,255));
                 }
             }
         }
