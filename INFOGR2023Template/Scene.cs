@@ -60,8 +60,8 @@ namespace INFOGR2023Template
                             else
                             {
                                 Vector3 normal = (origin + t2 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin));
-                            }
+                                intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin + t2 * direction));
+                            }                            
                         }
                         else
                         {
