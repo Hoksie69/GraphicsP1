@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
+
+//Goeie gedachte (volgens 
 
 namespace INFOGR2023Template
 {
@@ -11,19 +14,25 @@ namespace INFOGR2023Template
     {
         public List<Primitive> primitivesList = new List<Primitive>();
         public List<Light> lightsList = new List<Light>();
+        public List<Intersection> tempIntersectionList;
+
 
         public Scene()
         {
-            primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0,0,255), 1));
             primitivesList.Add(new Sphere(new Vector3(10, 0, 1), new Vector3(0, 255, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0,0,255), 1));
+            primitivesList.Add(new Sphere(new Vector3(7, 0, 1), new Vector3(255, 255, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(255, 0, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 255, 0), 1));
-            primitivesList.Add(new Plane(new Vector3(0, 0, 0), new Vector3(100, 100, 100), 10, new Vector3(0, 1, 0)));
-            //lightsList.Add(new Light(new Vector3(1, 1, 0), new Vector3(256, 256, 256)));
-        }
+            //primitivesList.Add(new Plane(new Vector3(0, -1, -1), new Vector3(100, 100, 100), 10, new Vector3(0, 1, 0)));
+            lightsList.Add(new Light(new Vector3(1, 1, 1), new Vector3(256, 256, 256)));
+        }   
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)
         {
+            tempIntersectionList = new List<Intersection>();
+            tempIntersectionList.Clear();
+
             foreach(Primitive primitive in primitivesList)
             {
                 if(primitive is Sphere)
@@ -44,22 +53,25 @@ namespace INFOGR2023Template
                             if((origin + t1 * direction).Length < (origin + t2 * direction).Length)
                             {
                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
-                                return new Intersection(((origin + t1 * direction).Length), primitive, normal);
+                                tempIntersectionList.Add(new Intersection((origin + t1 * direction).Length, primitive, normal));
+                                //return new Intersection(((origin + t1 * direction).Length), primitive, normal);
                             }
                             else
                             {
                                 Vector3 normal = (origin + t2 * direction) - primitive.position;
-                                return new Intersection(((origin + t2 * direction).Length), primitive, normal);
+                                tempIntersectionList.Add(new Intersection((origin + t2 * direction).Length, primitive, normal));
+                                //return new Intersection(((origin + t2 * direction).Length), primitive, normal);
                             }                            
                         }
                         else
                         {
                             Vector3 normal = (origin + t1 * direction) - primitive.position;
-                            return new Intersection(((origin + t1 * direction).Length), primitive, normal);
+                            //return new Intersection(((origin + t1 * direction).Length), primitive, normal);
                         }
-                        return null;
+                        //return null;
                     }
                 }
+
                 if(primitive is Plane)
                 {
                     float A = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z;
@@ -68,11 +80,12 @@ namespace INFOGR2023Template
                     {
                         float t = (-A) / B;
                         Vector3 normal = (origin + t * direction) - primitive.position;
-                        return new Intersection(((origin + t * direction).Length), primitive, normal);
+                        tempIntersectionList.Add(new Intersection((origin + t * direction).Length, primitive, normal));
+                        //return new Intersection(((origin + t * direction).Length), primitive, normal);
                     }
-                }   
+                }
             }
-            return null;
+            return tempIntersectionList.MinBy(test => test.distance);
         }
     }
 }

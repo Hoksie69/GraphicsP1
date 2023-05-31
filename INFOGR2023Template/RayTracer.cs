@@ -34,7 +34,7 @@ namespace INFOGR2023Template
                     Vector3 rayDirection = pointOnPlane - camera.position;
                     rayDirection.Normalize();
 
-                    tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
+                    Intersection tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
                     if(tempIntersection != null) 
                     {
                         screen.Plot((int)x, (int)y, GetColor((int)tempIntersection.victim.color.X, (int)tempIntersection.victim.color.Y, (int)tempIntersection.victim.color.Z));
