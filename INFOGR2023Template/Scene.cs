@@ -20,15 +20,15 @@ namespace INFOGR2023Template
 
         public Scene()
         {
-            primitivesList.Add(new Sphere(new Vector3(10, 3, 1), new Vector3(0, 255, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 4, 2), new Vector3(0, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(7, 2, 1), new Vector3(255, 255, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(255, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 255, 0), 1));
+            primitivesList.Add(new Sphere(new Vector3(10, 3, 1), new Vector3(0, 1, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 4, 2), new Vector3(0, 0, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(7, 2, 1), new Vector3(1, 1, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(1, 0, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 1, 0), 1));
             testVector = new Vector3(0, 1, 0);
             testVector.Normalize();
-            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(100, 100, 100), new Vector3(5, 5, 0), testVector));
-            lightsList.Add(new Light(new Vector3(5, 5, 0), new Vector3(255, 255, 255)));
+            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(0.1f, 0.1f, 0.1f), new Vector3(5, 5, 0), testVector));
+            lightsList.Add(new Light(new Vector3(5, 5, 0), new Vector3(1, 1, 1)));
         }
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)
@@ -55,21 +55,21 @@ namespace INFOGR2023Template
                         {
                             if (t1 != t2)
                             {
-                               if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
+                               if ((t1 * direction).Length < (t2 * direction).Length)
                                {
-                                Vector3 normal = (origin + t1 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
+                                    Vector3 normal = (origin + t1 * direction) - primitive.position;
+                                    intersections.Add(new Intersection(((t1 * direction).Length), primitive, normal, origin + t1 * direction));
                                }
                                else
                                {
                                     Vector3 normal = (origin + t2 * direction) - primitive.position;
-                                    intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin + t2 * direction));
-                                }
+                                    intersections.Add(new Intersection(((t2 * direction).Length), primitive, normal, origin + t2 * direction));
+                               }
                             }
                             else
                             {
                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
+                                intersections.Add(new Intersection(((t1 * direction).Length), primitive, normal, origin + t1 * direction));
                             }
                         }
 
@@ -84,7 +84,7 @@ namespace INFOGR2023Template
                         float t = (-B) / A;
 
                         Vector3 normal = (origin + t * direction) - primitive.position;
-                        intersections.Add(new Intersection(((origin + t * direction).Length), primitive, normal, origin + t * direction));
+                        intersections.Add(new Intersection(((t * direction).Length), primitive, normal, origin + t * direction));
                     }
                 }
             }

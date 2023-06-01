@@ -42,7 +42,7 @@ namespace INFOGR2023Template
                     }
                     else
                     {
-                        screen.Plot((int)x, (int)y, GetColor(200,200,200));
+                        screen.Plot((int)x, (int)y, GetColor(0.8f,0.8f,0.8f));
                         if(y == 200 && x % 10 == 0)
                             Debug.rayList.Add((new Vector2(camera.position.X, camera.position.Z), new Vector2(camera.position.X + rayDirection.X * 20, camera.position.Z + rayDirection.Z * 20)));
 
@@ -67,9 +67,12 @@ namespace INFOGR2023Template
             return new Vector3(0, 0, 0);
         }
 
-        public int GetColor(int R, int G, int B)
+        public int GetColor(float R, float G, float B)
         {
-            return (R << 16) + (G <<8) + B;
+            int R2 = (int)R * 255;
+            int G2 = (int)G * 255;
+            int B2 = (int)B * 255;
+            return (R2 << 16) + (G2 <<8) + B2;
         }
     }
 }

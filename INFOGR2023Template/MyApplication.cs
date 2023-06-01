@@ -46,14 +46,14 @@ namespace Template
             
             if (window.IsKeyPressed(Keys.Up))
             {
-                rayTracer.camera.GetNewAngleY(-22.5f);
+                rayTracer.camera.GetNewAngleY(0.3f);
                 rayTracer.camera.GetPlane();
                 Debug.rayList.Clear();
             }
             
             if (window.IsKeyPressed(Keys.Down))
             {
-                rayTracer.camera.GetNewAngleY(-22.5f);
+                rayTracer.camera.GetNewAngleY(-0.3f);
                 rayTracer.camera.GetPlane();
                 Debug.rayList.Clear();
             }

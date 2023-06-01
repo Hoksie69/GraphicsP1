@@ -1,4 +1,5 @@
 ﻿using OpenTK.Mathematics;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Windows;
 
 namespace Template
@@ -47,17 +48,16 @@ namespace Template
         public void GetNewAngle(float _angle)
         {
             angleXZ += _angle;
-            Console.WriteLine(angleXZ);
             look_at.X = (float)Math.Cos(toRadians(angleXZ));
             look_at.Z = (float)Math.Sin(toRadians(angleXZ));
-            look_at.Normalize();
-            Console.WriteLine(look_at);
         }
-       public void GetNewAngleY(float _angle)
+        public void GetNewAngleY(float value)
         {
-            angleY += _angle;
-            Console.WriteLine(angleY);
-            look_at.Y = (float)Math.Cos(toRadians(angleY));
+            if(look_at.Y >= 1 || look_at.Y <= -1)
+            {
+                return;
+            }
+            look_at.Y += value;
             look_at.Normalize();
             Console.WriteLine(look_at);
         }
