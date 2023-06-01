@@ -18,7 +18,7 @@ namespace INFOGR2023Template
         {
             distance = _distance;
             victim = _victim;
-            normal = _normal;
+            normal = _normal.Normalized();
             intersectionPoint = _intersectionPoint;
         }
     }

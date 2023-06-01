@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Template;
 using OpenTK.Mathematics;
 using SixLabors.ImageSharp;
+using OpenTK.Platform.Windows;
+using System.Diagnostics.CodeAnalysis;
 
 namespace INFOGR2023Template
 {
@@ -35,14 +37,14 @@ namespace INFOGR2023Template
                     Intersection tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
                     if(tempIntersection != null) 
                     {
-                        Vector3 tempColor = GetShadow(tempIntersection.victim, tempIntersection.intersectionPoint);
-                        screen.Plot((int)x, (int)y, GetColor((int)tempColor.X, (int)tempColor.Y, (int)tempColor.Z));
+                        Vector3 tempColor = GetShadow(tempIntersection.victim, tempIntersection);
+                        screen.Plot((int)x, (int)y, GetColor(tempColor.X, tempColor.Y, tempColor.Z));
                         if(y == 200 && x % 10 == 0)
                             Debug.rayList.Add((new Vector2(camera.position.X, camera.position.Z), new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z)));
                     }
                     else
                     {
-                        screen.Plot((int)x, (int)y, GetColor(200,200,200));
+                        screen.Plot((int)x, (int)y, GetColor(0.8f,0.8f,0.8f));
                         if(y == 200 && x % 10 == 0)
                             Debug.rayList.Add((new Vector2(camera.position.X, camera.position.Z), new Vector2(camera.position.X + rayDirection.X * 20, camera.position.Z + rayDirection.Z * 20)));
 
@@ -51,25 +53,47 @@ namespace INFOGR2023Template
             }
         }
 
-        public Vector3 GetShadow(Primitive victim, Vector3 intersectionPoint)
+        public Vector3 GetShadow(Primitive victim, Intersection _intersection)
         {
             foreach (Light l in scene.lightsList)
             {
-
-                Vector3 shadowRayDirection = l.location - intersectionPoint;
+                Vector3 shadowRayDirection = l.location - _intersection.intersectionPoint;
                 shadowRayDirection.Normalize();
 
-                if (!scene.ShadowIntersection(intersectionPoint, shadowRayDirection))
+                if (!scene.ShadowIntersection(_intersection.intersectionPoint, shadowRayDirection))
                 {
-                    return victim.color;
-                }   
+                    Vector3 color = new Vector3();
+                    float dot = Math.Max(0, Vector3.Dot(_intersection.normal, shadowRayDirection));
+                    Vector3 R = shadowRayDirection - 2 * Vector3.Dot(shadowRayDirection, _intersection.normal) * shadowRayDirection;
+                    R.Normalize();
+                    Vector3 V = _intersection.intersectionPoint - camera.position;
+                    V.Normalize();
+                    float dot2 = Math.Max(0, Vector3.Dot(V, R));
+                    ///float dot2 = Math.Max(0, )
+                    color.X = l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * dot * victim.color.X) + victim.highlightColor.X * (float)Math.Pow(dot2,250) + victim.color.X * 0.4f;
+                    color.Y = l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * dot * victim.color.Y) + victim.highlightColor.Y * (float)Math.Pow(dot2, 250) + victim.color.Y * 0.4f;
+                    color.Z = l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * dot * victim.color.Z) + victim.highlightColor.Z * (float)Math.Pow(dot2, 250) + victim.color.Z * 0.4f;
+                    
+                    if(color.X > 1)
+                        color.X = 1;
+                    if (color.Y > 1)
+                        color.Y = 1;
+                    if (color.Z > 1)
+                        color.Z = 1;
+
+                    return color;
+                }
             }
-            return new Vector3(0, 0, 0);
+            return new Vector3(victim.color.X * 0.2f, victim.color.Y * 0.2f, victim.color.Z * 0.2f);
         }
 
-        public int GetColor(int R, int G, int B)
+        public int GetColor(float R, float G, float B)
         {
-            return (R << 16) + (G <<8) + B;
+
+            int R2 = (int)(R*255);
+            int G2 = (int)(G * 255);
+            int B2 = (int)(B * 255);
+            return (R2 << 16) + (G2 <<8) + B2;
         }
     }
 }
