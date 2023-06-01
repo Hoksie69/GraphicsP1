@@ -14,6 +14,7 @@ namespace INFOGR2023Template
         public float radius;
         public Vector3 normal;
         public Vector3 color;
+        public Vector3 highlightColor;
         public Vector3 direction;
 
         public Primitive(Vector3 _position, Vector3 _color) 
@@ -25,9 +26,10 @@ namespace INFOGR2023Template
 
     internal class Sphere : Primitive
     {
-        public Sphere(Vector3 _position, Vector3 _color, float _radius) : base(_position, _color)
+        public Sphere(Vector3 _position, Vector3 _color, Vector3 _highlightColor, float _radius) : base(_position, _color)
         {
             radius = _radius;
+            highlightColor = _highlightColor;
         }
     }
 
