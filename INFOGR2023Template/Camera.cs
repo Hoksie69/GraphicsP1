@@ -10,6 +10,9 @@ namespace Template
         public Vector3 look_at;
         public Vector3 up_direction;
         public Vector3[] screenPlane = new Vector3[4];
+        public Vector3 right_direction;
+        float angleXZ;
+        float angleY;
 
         public Camera(Vector3 _position, Vector3 _look_at, Vector3 _up_direction) 
         {
@@ -23,14 +26,39 @@ namespace Template
 
         public void GetPlane()
         {
+            look_at.Normalize();
+            up_direction.Normalize();
             Vector3 planeCenter = position + look_at;
             float aspectRatio = 1.6f;
-            Vector3 rightDirection = Vector3.Cross(look_at, up_direction);
-            screenPlane[0] = planeCenter + up_direction - (aspectRatio * rightDirection);
-            screenPlane[1] = planeCenter + up_direction + (aspectRatio * rightDirection);
-            screenPlane[2] = planeCenter - up_direction - (aspectRatio * rightDirection);
-            screenPlane[3] = planeCenter - up_direction + (aspectRatio * rightDirection);
+            right_direction = Vector3.Cross(look_at, up_direction);
+            screenPlane[0] = planeCenter + up_direction - (aspectRatio * right_direction);
+            screenPlane[1] = planeCenter + up_direction + (aspectRatio * right_direction);
+            screenPlane[2] = planeCenter - up_direction - (aspectRatio * right_direction);
+            screenPlane[3] = planeCenter - up_direction + (aspectRatio * right_direction);
             
+        }
+
+        public void GetNewAngle(float _angle)
+        {
+            angleXZ += _angle;
+            Console.WriteLine(angleXZ);
+            look_at.X = (float)Math.Cos(toRadians(angleXZ));
+            look_at.Z = (float)Math.Sin(toRadians(angleXZ));
+            look_at.Normalize();
+            Console.WriteLine(look_at);
+        }
+       public void GetNewAngleY(float _angle)
+        {
+            angleY += _angle;
+            Console.WriteLine(angleY);
+            look_at.Y = (float)Math.Cos(toRadians(angleY));
+            look_at.Normalize();
+            Console.WriteLine(look_at);
+        }
+
+        float toRadians(float angle)
+        {
+            return (float)angle * (float)(Math.PI / 180);
         }
     }
 }

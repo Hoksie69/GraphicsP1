@@ -46,9 +46,11 @@ namespace INFOGR2023Template
             {
                 PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(255, 0, 255));
             }
-            PlotPixel((int)rayTracer.CamPos.X, (int)rayTracer.CamPos.Z, new Vector3(255, 255, 255));
+            PlotPixel((int)rayTracer.camera.position.X, (int)rayTracer.camera.position.Z, new Vector3(255, 255, 255));
+            Console.WriteLine(rayTracer.camera.position);
             PlotLine(new Vector2(rayTracer.CamPlane[0].X * scaleX, rayTracer.CamPlane[0].Z * scaleY), new Vector2(rayTracer.CamPlane[1].X * scaleX, rayTracer.CamPlane[1].Z * scaleY), new Vector3(255, 255, 255));
 
+            
             foreach(Primitive cirkel in rayTracer.scene.primitivesList) 
             { 
                 if(cirkel is Sphere)

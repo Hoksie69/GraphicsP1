@@ -11,13 +11,11 @@ namespace INFOGR2023Template
 {
     internal class RayTracer
     {        
-        Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
+        public Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
         public Scene scene = new Scene();
         Surface screen;
         Vector3 cameraPlaneBasisU;
         Vector3 cameraPlaneBasisV;
-
-        public Vector3 CamPos { get { return camera.position; } }
         public Vector3[] CamPlane { get { return camera.screenPlane; } }
         
         public RayTracer(Surface _screen)
@@ -64,7 +62,7 @@ namespace INFOGR2023Template
                 Vector3 shadowRayDirection = l.location - intersectionPoint;
                 shadowRayDirection.Normalize();
 
-                if (!scene.ShadowIntersection(intersectionPoint, shadowRayDirection, victim))
+                if (!scene.ShadowIntersection(intersectionPoint, shadowRayDirection))
                 {
                     return victim.color;
                 }   
