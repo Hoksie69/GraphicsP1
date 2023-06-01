@@ -13,6 +13,8 @@ namespace Template
         public Vector3 right_direction;
         float angleXZ;
         float angleY;
+        public Vector3 cameraPlaneBasisU;
+        public Vector3 cameraPlaneBasisV;
 
         public Camera(Vector3 _position, Vector3 _look_at, Vector3 _up_direction) 
         {
@@ -22,6 +24,8 @@ namespace Template
             up_direction = _up_direction;
             up_direction.Normalize();
             GetPlane();
+            cameraPlaneBasisU = screenPlane[1] - screenPlane[0];
+            cameraPlaneBasisV = screenPlane[2] - screenPlane[0];
         }
 
         public void GetPlane()
@@ -35,7 +39,9 @@ namespace Template
             screenPlane[1] = planeCenter + up_direction + (aspectRatio * right_direction);
             screenPlane[2] = planeCenter - up_direction - (aspectRatio * right_direction);
             screenPlane[3] = planeCenter - up_direction + (aspectRatio * right_direction);
-            
+            cameraPlaneBasisU = screenPlane[1] - screenPlane[0];
+            cameraPlaneBasisV = screenPlane[2] - screenPlane[0];
+
         }
 
         public void GetNewAngle(float _angle)
