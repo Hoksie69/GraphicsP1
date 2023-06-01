@@ -14,15 +14,12 @@ namespace INFOGR2023Template
         public Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
         public Scene scene = new Scene();
         Surface screen;
-        Vector3 cameraPlaneBasisU;
-        Vector3 cameraPlaneBasisV;
+
         public Vector3[] CamPlane { get { return camera.screenPlane; } }
         
         public RayTracer(Surface _screen)
         {
             screen = _screen;
-            cameraPlaneBasisU = camera.screenPlane[1] - camera.screenPlane[0];
-            cameraPlaneBasisV = camera.screenPlane[2] - camera.screenPlane[0];
         }
 
         public void Render()
@@ -31,7 +28,7 @@ namespace INFOGR2023Template
             {
                 for (float y = 0; y < screen.height; y++)
                 {
-                    Vector3 pointOnPlane = camera.screenPlane[0] + (x / screen.width) * cameraPlaneBasisU + (y / screen.height) * cameraPlaneBasisV;
+                    Vector3 pointOnPlane = camera.screenPlane[0] + (x / screen.width) * camera.cameraPlaneBasisU + (y / screen.height) * camera.cameraPlaneBasisV;
                     Vector3 rayDirection = pointOnPlane - camera.position;
                     rayDirection.Normalize();
                     

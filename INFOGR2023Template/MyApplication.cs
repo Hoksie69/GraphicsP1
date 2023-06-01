@@ -7,7 +7,7 @@ namespace Template
 {
     class MyApplication
     {
-        bool debugMode = true;
+        bool debugMode = false;
 
         // member variables
         public Surface screen;

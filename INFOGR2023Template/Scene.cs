@@ -51,26 +51,26 @@ namespace INFOGR2023Template
                         float t1 = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
                         float t2 = (float)(-abcB - Math.Sqrt(abcD)) / (2 * abcA);
 
-                        if(t1 > 0 && t2 > 0)
+                        if(t1 > 0 || t2 > 0)
                         {
                             if (t1 != t2)
                             {
                                if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
                                {
-                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
+                                Vector3 normal = (origin + t1 * direction) - primitive.position;
                                 intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
                                }
                                else
                                {
                                     Vector3 normal = (origin + t2 * direction) - primitive.position;
                                     intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin + t2 * direction));
-                                }                            
-                        }
-                        else
-                        {
-                            Vector3 normal = (origin + t1 * direction) - primitive.position;
-                            intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
-                        }
+                                }
+                            }
+                            else
+                            {
+                                Vector3 normal = (origin + t1 * direction) - primitive.position;
+                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
+                            }
                         }
 
                     }
