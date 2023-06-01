@@ -10,9 +10,9 @@ using SixLabors.ImageSharp;
 namespace INFOGR2023Template
 {
     internal class RayTracer
-    {
-        Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
-        Scene scene = new Scene();
+    {        
+        public Camera camera = new Camera(new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(0,1,0));
+        public Scene scene = new Scene();
         Surface screen;
         Vector3 cameraPlaneBasisU;
         Vector3 cameraPlaneBasisV;
@@ -48,6 +48,22 @@ namespace INFOGR2023Template
             }
         }
 
+        public void Debug()
+        {
+            float scaleX = 1 / 16 * screen.width / 2;
+            float scaleY = 1 / 10 * screen.height / 2;
+
+            for(int x = 0; x < 16; x++)
+            {
+                for(int z = 10; z > 0; z--)
+                {
+                    screen.Plot((int)camera.position.X, (int)camera.position.Z, GetColor(255, 255, 255));
+                    //screen.Plot((int)debugCamPos.X, (int)debugCamPos.Y, GetColor(255, 255, 0));
+                    //screen.Line((int)planePos1.X, (int)planePos1.Y, (int)planePos2.X, (int)planePos2.Y, GetColor(255,255,255));
+                }
+            }
+        }
+
         public Vector3 GetShadow(Primitive victim, Vector3 intersectionPoint)
         {
             foreach (Light l in scene.lightsList)
@@ -56,7 +72,7 @@ namespace INFOGR2023Template
                 Vector3 shadowRayDirection = l.location - intersectionPoint;
                 shadowRayDirection.Normalize();
 
-                if (!scene.ShadowIntersection(intersectionPoint, shadowRayDirection, victim))
+                if (!scene.ShadowIntersection(intersectionPoint, shadowRayDirection))
                 {
                     return victim.color;
                 }   

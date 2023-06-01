@@ -20,14 +20,15 @@ namespace INFOGR2023Template
 
         public Scene()
         {
-            primitivesList.Add(new Sphere(new Vector3(5, 0, 2), new Vector3(0, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(7, 0, 1), new Vector3(255, 255, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(10, 3, 1), new Vector3(0, 255, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 4, 2), new Vector3(0, 0, 255), 1));
+            primitivesList.Add(new Sphere(new Vector3(7, 2, 1), new Vector3(255, 255, 255), 1));
             primitivesList.Add(new Sphere(new Vector3(5, 0, -2), new Vector3(255, 0, 255), 1));
-            primitivesList.Add(new Sphere(new Vector3(10,0, -1), new Vector3(0, 255, 0), 1));
+            primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 255, 0), 1));
             testVector = new Vector3(0, 1, 0);
             testVector.Normalize();
-            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(100, 100, 100), new Vector3(5,5,0), testVector));
-            lightsList.Add(new Light(new Vector3(5, 6, 0), new Vector3(255, 255, 255)));
+            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(100, 100, 100), new Vector3(5, 5, 0), testVector));
+            lightsList.Add(new Light(new Vector3(5, 5, 0), new Vector3(255, 255, 255)));
         }
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)
@@ -35,7 +36,7 @@ namespace INFOGR2023Template
             intersections = new List<Intersection>();
             intersections.Clear();
 
-            foreach(Primitive primitive in primitivesList)
+            foreach (Primitive primitive in primitivesList)
             {
                 if (primitive is Sphere)
                 {
@@ -50,27 +51,30 @@ namespace INFOGR2023Template
                         float t1 = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
                         float t2 = (float)(-abcB - Math.Sqrt(abcD)) / (2 * abcA);
 
-                        if (t1 != t2)
+                        if(t1 > 0 && t2 > 0)
                         {
-                            if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
+                            if (t1 != t2)
                             {
-                                Vector3 normal = (origin + t1 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));                           
-                            }
-                            else
-                            {
-                                Vector3 normal = (origin + t2 * direction) - primitive.position;
-                                intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin + t2 * direction));
-                            }                            
+                               if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
+                               {
+                                 Vector3 normal = (origin + t1 * direction) - primitive.position;
+                                intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
+                               }
+                               else
+                               {
+                                    Vector3 normal = (origin + t2 * direction) - primitive.position;
+                                    intersections.Add(new Intersection(((origin + t2 * direction).Length), primitive, normal, origin + t2 * direction));
+                                }                            
                         }
                         else
                         {
                             Vector3 normal = (origin + t1 * direction) - primitive.position;
                             intersections.Add(new Intersection(((origin + t1 * direction).Length), primitive, normal, origin + t1 * direction));
                         }
+                        }
 
                     }
-                } 
+                }
                 if (primitive is Plane)
                 {
                     float B = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z - primitive.position.X * primitive.normal.X - primitive.position.Y * primitive.normal.Y - primitive.position.Z * primitive.normal.Z;
@@ -78,17 +82,16 @@ namespace INFOGR2023Template
                     if (A != 0 && A < 0)
                     {
                         float t = (-B) / A;
-                        
-                            Vector3 normal = (origin + t * direction) - primitive.position;
-                            intersections.Add(new Intersection(((origin + t * direction).Length), primitive, normal, origin + t * direction));
+
+                        Vector3 normal = (origin + t * direction) - primitive.position;
+                        intersections.Add(new Intersection(((origin + t * direction).Length), primitive, normal, origin + t * direction));
                     }
                 }
             }
-
             return intersections.MinBy(test => test.distance);
         }
 
-        public bool ShadowIntersection(Vector3 origin, Vector3 direction, Primitive victim)
+        public bool ShadowIntersection(Vector3 origin, Vector3 direction)
         {
             foreach (Primitive primitive in primitivesList)
             {
@@ -101,15 +104,15 @@ namespace INFOGR2023Template
                     //Console.WriteLine(abcD); 
                     if (abcD >= 0)
                     {
-                        float t = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
+                        float t1 = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
+                        float t2 = (float)(-abcB - Math.Sqrt(abcD)) / (2 * abcA);
 
-                        if (t > 0.001f && t < (direction * t - origin).Length - 0.001f){
+                        if ((t1 > 0.0001f && t1 < (direction * t1 - origin).Length - 0.0001f)|| (t2 > 0.0001f && t2 < (direction * t2 - origin).Length))
                             return true;
-                        }
                     }
                 }
-                
-                if(primitive is Plane)
+
+                if (primitive is Plane)
                 {
                     float B = primitive.normal.X * origin.X + primitive.normal.Y * origin.Y + primitive.normal.Z * origin.Z - primitive.position.X * primitive.normal.X - primitive.position.Y * primitive.normal.Y - primitive.position.Z * primitive.normal.Z;
                     float A = primitive.normal.X * direction.X + primitive.normal.Y * direction.Y + primitive.normal.Z * direction.Z;
@@ -117,14 +120,10 @@ namespace INFOGR2023Template
                     {
                         float t = (-B) / A;
                         if (t > 0.001f && t < (direction * t - origin).Length - 0.001f)
-                        {
                             return true;
-                        }
-
                     }
                 }
             }
-
             return false;
         }
     }
