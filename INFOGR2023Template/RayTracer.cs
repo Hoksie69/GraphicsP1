@@ -22,7 +22,7 @@ namespace INFOGR2023Template
         public RayTracer(Surface _screen)
         {
             screen = _screen;
-        }
+        } 
 
         public void Render()
         {
@@ -64,15 +64,24 @@ namespace INFOGR2023Template
                 {
                     Vector3 color = new Vector3();
                     float dot = Math.Max(0, Vector3.Dot(_intersection.normal, shadowRayDirection));
-                    Vector3 R = shadowRayDirection - 2 * Vector3.Dot(shadowRayDirection, _intersection.normal) * shadowRayDirection;
+                    Vector3 R = -shadowRayDirection - 2 * Vector3.Dot(-shadowRayDirection, _intersection.normal) * _intersection.normal;
                     R.Normalize();
-                    Vector3 V = _intersection.intersectionPoint - camera.position;
+                    Vector3 V = _intersection.intersectionPoint - camera.position;  
                     V.Normalize();
-                    float dot2 = Math.Max(0, Vector3.Dot(V, R));
-                    ///float dot2 = Math.Max(0, )
-                    color.X = l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * dot * victim.color.X) + victim.highlightColor.X * (float)Math.Pow(dot2,250) + victim.color.X * 0.4f;
-                    color.Y = l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * dot * victim.color.Y) + victim.highlightColor.Y * (float)Math.Pow(dot2, 250) + victim.color.Y * 0.4f;
-                    color.Z = l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * dot * victim.color.Z) + victim.highlightColor.Z * (float)Math.Pow(dot2, 250) + victim.color.Z * 0.4f;
+                    float dot2 = Math.Max(0, Vector3.Dot(-V, R));
+                    if(victim is Sphere)
+                    {
+                        color.X = l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.X) + victim.highlightColor.X * (float)Math.Pow(dot2,250) ) + victim.color.X * 0.1f;
+                        color.Y = l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.Y) + victim.highlightColor.Y * (float)Math.Pow(dot2, 250) ) + victim.color.Y * 0.1f;
+                        color.Z = l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.Z) + victim.highlightColor.Z * (float)Math.Pow(dot2, 250) ) + victim.color.Z * 0.1f;
+                    }
+                   
+                    if(victim is Plane)
+                    {
+                        color.X = l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.X /*+ victim.highlightColor.X * (float)Math.Pow(dot2,250) */) + victim.color.X * 0.1f;
+                        color.Y = l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.Y /*+ victim.highlightColor.Y * (float)Math.Pow(dot2, 250) */) + victim.color.Y * 0.1f;
+                        color.Z = l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.Z/*+ victim.highlightColor.Z * (float)Math.Pow(dot2, 250) */) + victim.color.Z * 0.1f;
+                    }
                     
                     if(color.X > 1)
                         color.X = 1;
@@ -84,7 +93,7 @@ namespace INFOGR2023Template
                     return color;
                 }
             }
-            return new Vector3(victim.color.X * 0.2f, victim.color.Y * 0.2f, victim.color.Z * 0.2f);
+            return new Vector3(victim.color.X * 0.1f, victim.color.Y * 0.1f, victim.color.Z * 0.1f);
         }
 
         public int GetColor(float R, float G, float B)
