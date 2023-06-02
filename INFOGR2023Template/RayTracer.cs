@@ -45,8 +45,15 @@ namespace INFOGR2023Template
                             Vector3 reflectedRay = rayDirection - 2 * (Vector3.Dot(rayDirection, tempIntersection.normal) * tempIntersection.normal);
                             reflectedRay.Normalize();
                             Intersection reflectedIntersection = scene.SceneIntersection(tempIntersection.intersectionPoint, reflectedRay);
-                            if (reflectedIntersection != null /*&& tempIntersection.victim != reflectedIntersection.victim*/)
+                            if (reflectedIntersection != null  /*&& tempIntersection.victim != reflectedIntersection.victim*/)
+                            {
                                 tempColor = tempIntersection.victim.color * GetShadow(reflectedIntersection.victim, reflectedIntersection);
+
+                                if (x % 10 == 0 && tempIntersection.intersectionPoint.Y == camera.position.Y)
+                                {
+                                    Debug.secondaryRay.Add((new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z), new Vector2(reflectedIntersection.victim.position.X, reflectedIntersection.victim.position.Z)));
+                                }
+                            }
                             else
                                 tempColor = backgroundColor;
                         }
