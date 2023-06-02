@@ -39,8 +39,13 @@ namespace INFOGR2023Template
                     {
                         Vector3 tempColor = GetShadow(tempIntersection.victim, tempIntersection);
                         screen.Plot((int)x, (int)y, GetColor(tempColor.X, tempColor.Y, tempColor.Z));
-                        if(y == 200 && x % 10 == 0)
+                        if (y == 200 && x % 10 == 0)
+                        {
                             Debug.rayList.Add((new Vector2(camera.position.X, camera.position.Z), new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z)));
+                        }
+                        foreach (Light l in scene.lightsList)
+                            if(x % 10 == 0 && tempIntersection.victim is Sphere && y == 200 && tempIntersection.victim.position.Y == camera.position.Y)
+                                Debug.shadowRay.Add((new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z), new Vector2(l.location.X, l.location.Z)));
                     }
                     else
                     {

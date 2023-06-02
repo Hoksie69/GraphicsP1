@@ -14,6 +14,7 @@ namespace INFOGR2023Template
         Surface screen;
         RayTracer rayTracer;
         public static List<(Vector2, Vector2)> rayList = new List<(Vector2, Vector2)>();
+        public static List<(Vector2, Vector2)> shadowRay = new List<(Vector2, Vector2)>();
 
         public Debug(Surface _screen, RayTracer _rayTracer) 
         {
@@ -42,10 +43,15 @@ namespace INFOGR2023Template
             float scaleX = 1f / 16f * ((float)screen.width / 2f);
             float scaleY = 1f / 10f * ((float)screen.height / 2f);
 
-            foreach((Vector2, Vector2) ray in rayList)
+            foreach ((Vector2, Vector2) ray in shadowRay)
             {
-                PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(255, 0, 255));
+                PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(255, 255, 0));
             }
+            foreach ((Vector2, Vector2) ray in rayList)
+            {
+                PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(0, 255, 255));
+            }
+            
             PlotPixel((int)(rayTracer.camera.position.X * scaleX), (int)(rayTracer.camera.position.Z * scaleY), new Vector3(255, 255, 255));
             Console.WriteLine(rayTracer.camera.position);
             PlotLine(new Vector2(rayTracer.CamPlane[0].X * scaleX, rayTracer.CamPlane[0].Z * scaleY), new Vector2(rayTracer.CamPlane[1].X * scaleX, rayTracer.CamPlane[1].Z * scaleY), new Vector3(255, 255, 255));
