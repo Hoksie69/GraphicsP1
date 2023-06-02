@@ -59,16 +59,16 @@ namespace INFOGR2023Template
                         {
                             if (t1 != t2)
                             {
-                               if ((t1 * direction).Length < (t2 * direction).Length)
-                               {
-                                    Vector3 normal = (t1 * direction) - primitive.position;
-                                    intersections.Add(new Intersection(((t1 * direction).Length), primitive, normal, origin + t1 * direction));
-                               }
-                               else
-                               {
-                                    Vector3 normal = (t2 * direction) - primitive.position;
-                                    intersections.Add(new Intersection(((t2 * direction).Length), primitive, normal, origin + t2 * direction));
-                               } 
+                                if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
+                                {
+                                     Vector3 normal = (t1 * direction) - primitive.position;
+                                     intersections.Add(new Intersection(((t1 * direction).Length), primitive, normal, origin + t1 * direction));
+                                }
+                                else
+                                {
+                                     Vector3 normal = (t2 * direction) - primitive.position;
+                                     intersections.Add(new Intersection(((t2 * direction).Length), primitive, normal, origin + t2 * direction));
+                                } 
                             }
                             else
                             {
