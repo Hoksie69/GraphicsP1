@@ -29,6 +29,24 @@ namespace Template
         // tick: renders one frame
         public void Tick()
         {
+            if (window.IsKeyPressed(Keys.Q))
+            {
+                rayTracer.camera.FOV -= 15;
+                rayTracer.camera.GetPlane();
+                Debug.rayList.Clear();
+            }
+            if (window.IsKeyPressed(Keys.O))
+            {
+                rayTracer.camera.AimAt(new OpenTK.Mathematics.Vector3(0, 0, 1));
+                rayTracer.camera.GetPlane();
+                Debug.rayList.Clear();
+            }
+            if (window.IsKeyPressed(Keys.E))
+            {
+                rayTracer.camera.FOV += 15;
+                rayTracer.camera.GetPlane();
+                Debug.rayList.Clear();
+            }
 
             if (window.IsKeyPressed(Keys.Right))
             { 

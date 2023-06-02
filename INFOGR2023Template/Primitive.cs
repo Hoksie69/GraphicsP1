@@ -16,6 +16,7 @@ namespace INFOGR2023Template
         public Vector3 color;
         public Vector3 highlightColor;
         public Vector3 direction;
+        public int specularity;
 
         public Primitive(Vector3 _position, Vector3 _color) 
         {
@@ -26,10 +27,11 @@ namespace INFOGR2023Template
 
     internal class Sphere : Primitive
     {
-        public Sphere(Vector3 _position, Vector3 _color, Vector3 _highlightColor, float _radius) : base(_position, _color)
+        public Sphere(Vector3 _position, Vector3 _color, Vector3 _highlightColor, float _radius, int _specularity = 0) : base(_position, _color)
         {
             radius = _radius;
             highlightColor = _highlightColor;
+            specularity = _specularity;
         }
     }
 
@@ -39,6 +41,15 @@ namespace INFOGR2023Template
         {
             normal = _normal;
             direction = _direction; 
+        }
+
+        public static Vector3 CheckerboardPattern(float u, float v)
+        {
+            int checkColor = ((int)u + (int)v) & 1;
+            if (checkColor == 0)
+                return new Vector3(0, 0, 0);
+            else
+                return new Vector3(1, 1, 1);
         }
     }
 }

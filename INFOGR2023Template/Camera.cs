@@ -15,6 +15,7 @@ namespace Template
         float angleY;
         public Vector3 cameraPlaneBasisU;
         public Vector3 cameraPlaneBasisV;
+        public float FOV = 90;
 
         public Camera(Vector3 _position, Vector3 _look_at, Vector3 _up_direction) 
         {
@@ -32,7 +33,7 @@ namespace Template
         {
             look_at.Normalize();
             up_direction.Normalize();
-            Vector3 planeCenter = position + look_at;
+            Vector3 planeCenter = position + (float)(FOV / 90) * look_at;
             float aspectRatio = 1.6f;
             right_direction = Vector3.Cross(look_at, up_direction);
             screenPlane[0] = planeCenter + up_direction - (aspectRatio * right_direction);
@@ -65,6 +66,13 @@ namespace Template
         float toRadians(float angle)
         {
             return (float)angle * (float)(Math.PI / 180);
+        }
+
+        public void AimAt(Vector3 target)
+        {
+            Vector3 targetVector = new Vector3();
+            targetVector = target - position;
+            look_at = targetVector.Normalized();
         }
     }
 }
