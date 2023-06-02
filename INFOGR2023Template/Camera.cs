@@ -58,9 +58,8 @@ namespace Template
         }
        public void GetNewAngleY(float _angle)
         {
-            angleY += _angle;
-            Console.WriteLine(angleY);
-            look_at.Y = (float)Math.Cos(toRadians(angleY));
+            angleY = Math.Clamp(_angle, -1, 1);
+            look_at.Y += angleY;
             look_at.Normalize();
             Console.WriteLine(look_at);
         }
