@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 //Goeie gedachte (volgens 
@@ -27,11 +28,12 @@ namespace INFOGR2023Template
             primitivesList.Add(new Sphere(new Vector3(7, 5, 1), new Vector3(0.5f, 1, 0.5f), new Vector3(0, 0, 0), 1));
             primitivesList.Add(new Sphere(new Vector3(5, 5, -2), new Vector3(1, 0, 1), new Vector3(0, 0, 0), 1));
             primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 1, 0), new Vector3(0, 0.5f, 1), new Vector3(0, 0, 0), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 1, 0), new Vector3(0, 0.5f, 1), new Vector3(0, 0, 0), 1, 100));
             testVector = new Vector3(0, 1, 0);
             testVector.Normalize();
             primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(0.7f, 0.7f, 0.7f), new Vector3(5, 5, 0), testVector));
-            lightsList.Add(new Light(new Vector3(5, 4, 0), new Vector3(5, 5, 5)));
+            lightsList.Add(new Light(new Vector3(5, 2, 0), new Vector3(5, 5, 5)));
+
         }
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)
@@ -54,7 +56,7 @@ namespace INFOGR2023Template
                         float t1 = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
                         float t2 = (float)(-abcB - Math.Sqrt(abcD)) / (2 * abcA);
 
-                        if(t1 > 0 || t2 > 0)
+                        if(t1 > epsilon || t2 > epsilon)
                         {
                             if (t1 != t2)
                             {
@@ -91,10 +93,10 @@ namespace INFOGR2023Template
                     }
                 }
             }
-            return intersections.MinBy(test => test.distance);
+            return intersections.MinBy(Intersection => Intersection.distance);
         }
 
-        public bool ShadowIntersection(Vector3 origin, Vector3 direction)
+        public bool ShadowIntersection(Vector3 origin, Vector3 direction, Light light)
         {
             foreach (Primitive primitive in primitivesList)
             {
@@ -110,7 +112,7 @@ namespace INFOGR2023Template
                         float t1 = (float)(-abcB + Math.Sqrt(abcD)) / (2 * abcA);
                         float t2 = (float)(-abcB - Math.Sqrt(abcD)) / (2 * abcA);
 
-                        if ((t1 > epsilon && t1 < (direction * t1).Length - epsilon)|| (t2 > epsilon && t2 < (direction * t2).Length))
+                        if ((t1 > epsilon && t1 < (light.location - (origin + direction)).Length) || (t2 > epsilon && t2 < (light.location - (origin + direction)).Length))
                             return true;
                     }
                 }
@@ -122,7 +124,7 @@ namespace INFOGR2023Template
                     if (A != 0 && A < 0)
                     {
                         float t = (-B) / A;
-                        if (t > epsilon && t < (direction * t).Length - epsilon)
+                        if (t > epsilon && t < (light.location - (origin + direction)).Length - epsilon)
                             return true;
                     }
                 }
