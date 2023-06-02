@@ -97,10 +97,13 @@ namespace INFOGR2023Template
                     Vector3 intersectionVector = _intersection.intersectionPoint;
                     if(victim is Plane)
                     {
-
+                        tempCheckerBoard = Plane.CheckerboardPatternPlane(intersectionVector);
                     }
-                        //tempCheckerBoard = Plane.CheckerboardPatternPlane(intersectionVector);
-                    //if(victim is Sphere)
+
+                    if(victim is Sphere)
+                    {
+                        tempCheckerBoard = Sphere.CheckerboardPatternSphere(intersectionVector);
+                    }
 
                 }
                 if (!scene.ShadowIntersection(_intersection.intersectionPoint, shadowRayDirection,l) || victim is Sphere)
