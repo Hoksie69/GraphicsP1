@@ -35,9 +35,9 @@ namespace Template
                 rayTracer.camera.GetPlane();
                 Debug.rayList.Clear();
             }
-            if (window.IsKeyPressed(Keys.O))
+            if (window.IsKeyPressed(Keys.D1))
             {
-                rayTracer.camera.AimAt(new OpenTK.Mathematics.Vector3(0, 0, 1));
+                rayTracer.camera.AimAt(rayTracer.scene.primitivesList[1]);
                 rayTracer.camera.GetPlane();
                 Debug.rayList.Clear();
             }

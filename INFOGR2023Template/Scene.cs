@@ -22,18 +22,17 @@ namespace INFOGR2023Template
 
         public Scene()
         {
-            epsilon = .0001f;
-            primitivesList.Add(new Sphere(new Vector3(10, 3, 1), new Vector3(0, 0.5f, 1), new Vector3(0, 0, 0), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 2, 2), new Vector3(0, 0, 0.5f), new Vector3(0, 0, 0), 1));
-            primitivesList.Add(new Sphere(new Vector3(7, 5, 1), new Vector3(0.5f, 1, 0.5f), new Vector3(0, 0, 0), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 5, -2), new Vector3(1, 0, 1), new Vector3(0, 0, 0), 1));
+            epsilon = .001f;
+            primitivesList.Add(new Sphere(new Vector3(10, 3, 1), new Vector3(0, 0.5f, 1), new Vector3(1, 1, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 3, 2), new Vector3(0, 0, 0.5f), new Vector3(1, 1, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(7, 4, 1), new Vector3(0.5f, 1, 0.5f), new Vector3(1, 1, 1), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 4, -2), new Vector3(1, 0, 1), new Vector3(0, 0, 0), 1));
             primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 1, 0), new Vector3(0, 0.5f, 1), new Vector3(0, 0, 0), 1, 100));
+            primitivesList.Add(new Sphere(new Vector3(5, 1, 0), new Vector3(1, 1, 1), new Vector3(0, 0, 0), 1, 100));
             testVector = new Vector3(0, 1, 0);
             testVector.Normalize();
-            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(0.7f, 0.7f, 0.7f), new Vector3(5, 5, 0), testVector));
+            primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(0.7f, 0.7f, 0.7f), new Vector3(0, 0, 0), testVector));
             lightsList.Add(new Light(new Vector3(5, 2, 0), new Vector3(5, 5, 5)));
-
         }
 
         public Intersection SceneIntersection(Vector3 origin, Vector3 direction)

@@ -15,7 +15,6 @@ namespace INFOGR2023Template
         public Vector3 normal;
         public Vector3 color;
         public Vector3 highlightColor;
-        public Vector3 direction;
         public int specularity;
 
         public Primitive(Vector3 _position, Vector3 _color) 
@@ -37,10 +36,10 @@ namespace INFOGR2023Template
 
     internal class Plane : Primitive
     {
-        public Plane(Vector3 _position, Vector3 _color, Vector3 _direction, Vector3 _normal) : base(_position, _color)
+        public Plane(Vector3 _position, Vector3 _color, Vector3 _highlightColor, Vector3 _normal) : base(_position, _color)
         {
             normal = _normal;
-            direction = _direction; 
+            highlightColor = _highlightColor;
         }
 
         public static Vector3 CheckerboardPattern(float u, float v)
