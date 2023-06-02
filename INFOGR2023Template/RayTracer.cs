@@ -34,8 +34,8 @@ namespace INFOGR2023Template
                 {
                     Vector3 pointOnPlane = camera.screenPlane[0] + (x / screen.width) * camera.cameraPlaneBasisU + (y / screen.height) * camera.cameraPlaneBasisV;
                     Vector3 rayDirection = pointOnPlane - camera.position;
-                    rayDirection.Normalize();
-
+                        rayDirection.Normalize();
+                    
                     Intersection tempIntersection = scene.SceneIntersection(camera.position, rayDirection);
                     if(tempIntersection != null) 
                     {
@@ -47,14 +47,13 @@ namespace INFOGR2023Template
                             reflectedRay.Normalize();
                             
                             Intersection reflectedIntersection = scene.SceneIntersection(tempIntersection.intersectionPoint, reflectedRay);
-
-                            if (reflectedIntersection != null && tempIntersection.victim != reflectedIntersection.victim)
+                            if (reflectedIntersection != null  && tempIntersection.victim != reflectedIntersection.victim)
                             {
                                 tempColor = tempIntersection.victim.color * GetShadow(reflectedIntersection.victim, reflectedIntersection);
 
-                                if (x % 10 == 0 && tempIntersection.intersectionPoint.Y == camera.position.Y)
+                                if (x % 10 == 0 /*&& reflectedIntersection.intersectionPoint.Y == camera.position.Y*/)
                                 {
-                                    Debug.secondaryRay.Add((new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z), new Vector2(reflectedIntersection.victim.position.X, reflectedIntersection.victim.position.Z)));
+                                    Debug.secondaryRayList.Add((new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z), new Vector2(reflectedIntersection.intersectionPoint.X, reflectedIntersection.intersectionPoint.Z)));
                                 }
                             }
                             else
@@ -62,6 +61,7 @@ namespace INFOGR2023Template
                         }
                         else
                             tempColor = GetShadow(tempIntersection.victim, tempIntersection);
+                        
                         screen.Plot((int)x, (int)y, GetColor(tempColor.X, tempColor.Y, tempColor.Z));
                         if (y == 200 && x % 10 == 0)
                         {
@@ -69,7 +69,7 @@ namespace INFOGR2023Template
                         }
                         foreach (Light l in scene.lightsList)
                             if(x % 10 == 0 && tempIntersection.victim is Sphere && y == 200 && tempIntersection.intersectionPoint.Y == camera.position.Y)
-                                Debug.shadowRay.Add((new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z), new Vector2(l.location.X, l.location.Z)));
+                                Debug.shadowRayList.Add((new Vector2(tempIntersection.intersectionPoint.X, tempIntersection.intersectionPoint.Z), new Vector2(l.location.X, l.location.Z)));
                     }
                     else
                     {
@@ -85,13 +85,25 @@ namespace INFOGR2023Template
         public Vector3 GetShadow(Primitive victim, Intersection _intersection)
         {
             Vector3 pixelColor = new Vector3();
+            Vector3 tempCheckerBoard = new Vector3();
             foreach (Light l in scene.lightsList)
             {
                 Vector3 shadowRayDirection = l.location - _intersection.intersectionPoint;
                 shadowRayDirection.Normalize();
                 Vector3 tempColor = new Vector3();
 
-                if (!scene.ShadowIntersection(_intersection.intersectionPoint, shadowRayDirection,l))
+                if (victim.checkerboardPattern)
+                {
+                    Vector3 intersectionVector = _intersection.intersectionPoint;
+                    if(victim is Plane)
+                    {
+
+                    }
+                        //tempCheckerBoard = Plane.CheckerboardPatternPlane(intersectionVector);
+                    //if(victim is Sphere)
+
+                }
+                if (!scene.ShadowIntersection(_intersection.intersectionPoint, shadowRayDirection,l) || victim is Sphere)
                 {
                     float dot = Math.Max(0, Vector3.Dot(_intersection.normal, shadowRayDirection));
                     Vector3 R = shadowRayDirection + 2 * Vector3.Dot(shadowRayDirection, _intersection.normal) * _intersection.normal;
@@ -102,35 +114,28 @@ namespace INFOGR2023Template
 
                     if(victim is Sphere)
                     {
-                        tempColor.X = l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.X) + victim.highlightColor.X * (float)Math.Pow(dot2, 2) * ambientLight);
-                        tempColor.Y = l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.Y) + victim.highlightColor.Y * (float)Math.Pow(dot2, 2) * ambientLight);
-                        tempColor.Z = l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.Z) + victim.highlightColor.Z * (float)Math.Pow(dot2, 2) * ambientLight);
-                    }
-                    if (victim is Plane)
+                        tempColor.X += l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.X) + victim.highlightColor.X * (float)Math.Pow(dot2,50) );
+                        tempColor.Y += l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.Y) + victim.highlightColor.Y * (float)Math.Pow(dot2, 50) );
+                        tempColor.Z += l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * (dot * victim.color.Z) + victim.highlightColor.Z * (float)Math.Pow(dot2, 50) );
+                    } 
+                    if(victim is Plane)
                     {
-                        Vector3 intersectionVector = _intersection.intersectionPoint;
-                        float dotU = Vector3.Dot(intersectionVector, new Vector3(1, 0, 0));
-                        float dotV = Vector3.Dot(intersectionVector, new Vector3(0, 0, 1));
-
-                        float u = dotU;
-                        float v = dotV;
-                        Vector3 tempCheckerboard = Plane.CheckerboardPattern(u, v);
-                        tempColor.X += tempCheckerboard.X * l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.X + victim.highlightColor.X * (float)Math.Pow(dot2, 2));
-                        tempColor.Y += tempCheckerboard.Y * l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.Y + victim.highlightColor.Y * (float)Math.Pow(dot2, 2));
-                        tempColor.Z += tempCheckerboard.Z * l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.Z + victim.highlightColor.Z * (float)Math.Pow(dot2, 2));
+                        tempColor.X += tempCheckerBoard.X * l.intensity.X * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.X + victim.highlightColor.X * (float)Math.Pow(dot2, 50));
+                        tempColor.Y += tempCheckerBoard.Y * l.intensity.Y * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.Y + victim.highlightColor.Y * (float)Math.Pow(dot2, 50));
+                        tempColor.Z += tempCheckerBoard.Z * l.intensity.Z * (float)(1 / Math.Pow((float)(l.location - _intersection.intersectionPoint).Length, 2) * victim.color.Z + victim.highlightColor.Z * (float)Math.Pow(dot2, 50));
                     }
 
-                    if (tempColor.X > 1)
-                        tempColor.X = 1;
-                    if (tempColor.Y > 1)
-                        tempColor.Y = 1;
-                    if (tempColor.Z > 1)
-                        tempColor.Z = 1;
+                    tempColor.X = Math.Clamp(tempColor.X, 0, 1);
+                    tempColor.Y = Math.Clamp(tempColor.Y, 0, 1);
+                    tempColor.Z = Math.Clamp(tempColor.Z, 0, 1);
 
                     pixelColor += tempColor;
                 }
             }
-            return pixelColor + new Vector3(Math.Clamp(pixelColor.X + victim.color.X * ambientLight, 0, 1), Math.Clamp(pixelColor.Y + victim.color.Y * ambientLight, 0, 1), Math.Clamp(pixelColor.Z + victim.color.Z * ambientLight, 0, 1));
+            if(victim.checkerboardPattern)
+                return new Vector3(Math.Clamp(pixelColor.X + tempCheckerBoard.X * ambientLight, 0, 1), Math.Clamp(pixelColor.Y + tempCheckerBoard.Y * ambientLight, 0, 1), Math.Clamp(pixelColor.Z + tempCheckerBoard.Z * ambientLight, 0, 1));
+            else
+                return new Vector3(Math.Clamp(pixelColor.X + victim.color.X * ambientLight, 0, 1), Math.Clamp(pixelColor.Y + victim.color.Y * ambientLight, 0, 1), Math.Clamp(pixelColor.Z + victim.color.Z * ambientLight, 0, 1));
         }
 
         public int GetColor(float R, float G, float B)

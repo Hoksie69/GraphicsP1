@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using INFOGR2023Template;
+using OpenTK.Mathematics;
 using System.Windows;
 
 namespace Template
@@ -33,7 +34,9 @@ namespace Template
         {
             look_at.Normalize();
             up_direction.Normalize();
-            Vector3 planeCenter = position + (float)(FOV / 90) * look_at;
+            FOV = Math.Clamp(FOV, 15, 180);
+            Vector3 planeCenter = position + (float)((2 * Math.PI / 360) * (180 - FOV))  * look_at;
+            Console.WriteLine(FOV + " " + (float)((2 * Math.PI / 360) * (180 - FOV)));
             float aspectRatio = 1.6f;
             right_direction = Vector3.Cross(look_at, up_direction);
             screenPlane[0] = planeCenter + up_direction - (aspectRatio * right_direction);
@@ -42,7 +45,6 @@ namespace Template
             screenPlane[3] = planeCenter - up_direction + (aspectRatio * right_direction);
             cameraPlaneBasisU = screenPlane[1] - screenPlane[0];
             cameraPlaneBasisV = screenPlane[2] - screenPlane[0];
-
         }
 
         public void GetNewAngle(float _angle)
@@ -56,9 +58,8 @@ namespace Template
         }
        public void GetNewAngleY(float _angle)
         {
-            angleY += _angle;
-            Console.WriteLine(angleY);
-            look_at.Y = (float)Math.Cos(toRadians(angleY));
+            angleY = Math.Clamp(_angle, -1, 1);
+            look_at.Y += angleY;
             look_at.Normalize();
             Console.WriteLine(look_at);
         }
@@ -68,10 +69,10 @@ namespace Template
             return (float)angle * (float)(Math.PI / 180);
         }
 
-        public void AimAt(Vector3 target)
+        public void AimAt(Primitive primitive)
         {
             Vector3 targetVector = new Vector3();
-            targetVector = target - position;
+            targetVector = primitive.position - position;
             look_at = targetVector.Normalized();
         }
     }

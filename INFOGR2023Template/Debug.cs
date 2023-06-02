@@ -14,12 +14,12 @@ namespace INFOGR2023Template
         Surface screen;
         RayTracer rayTracer;
         public static List<(Vector2, Vector2)> rayList = new List<(Vector2, Vector2)>();
-        public static List<(Vector2, Vector2)> shadowRay = new List<(Vector2, Vector2)>();
-        public static List<(Vector2, Vector2)> secondaryRay = new List<(Vector2, Vector2)>();
+        public static List<(Vector2, Vector2)> shadowRayList = new List<(Vector2, Vector2)>();
+        public static List<(Vector2, Vector2)> secondaryRayList = new List<(Vector2, Vector2)>();
 
         bool showViewRay = true;
         bool showShadowRay = true;
-        bool showSecondaryRay = false;
+        bool showSecondaryRay = true;
 
         public Debug(Surface _screen, RayTracer _rayTracer) 
         {
@@ -48,7 +48,7 @@ namespace INFOGR2023Template
             float scaleX = 1f / 16f * ((float)screen.width / 2f);
             float scaleY = 1f / 10f * ((float)screen.height / 2f);
             if(showShadowRay)
-                foreach ((Vector2, Vector2) ray in shadowRay)
+                foreach ((Vector2, Vector2) ray in shadowRayList)
                     PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(255, 255, 0));
 
             if (showViewRay)
@@ -56,7 +56,7 @@ namespace INFOGR2023Template
                     PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(0, 255, 255));
 
             if (showSecondaryRay)
-                foreach((Vector2, Vector2) ray in secondaryRay)
+                foreach((Vector2, Vector2) ray in secondaryRayList)
                     PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(125, 0, 255));             
             
             PlotPixel((int)(rayTracer.camera.position.X * scaleX), (int)(rayTracer.camera.position.Z * scaleY), new Vector3(255, 255, 255));

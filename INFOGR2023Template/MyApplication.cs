@@ -33,47 +33,47 @@ namespace Template
             {
                 rayTracer.camera.FOV -= 15;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
-            if (window.IsKeyPressed(Keys.O))
+            if (window.IsKeyPressed(Keys.D1))
             {
-                rayTracer.camera.AimAt(new OpenTK.Mathematics.Vector3(0, 0, 1));
+                rayTracer.camera.AimAt(rayTracer.scene.primitivesList[1]);
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
             if (window.IsKeyPressed(Keys.E))
             {
                 rayTracer.camera.FOV += 15;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.Right))
             { 
                 rayTracer.camera.GetNewAngle(22.5f);
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.Left))
             {
                 rayTracer.camera.GetNewAngle(-22.5f);
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
             
             if (window.IsKeyPressed(Keys.Up))
             {
-                rayTracer.camera.GetNewAngleY(-22.5f);
+                rayTracer.camera.GetNewAngleY(0.3f);
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
             
             if (window.IsKeyPressed(Keys.Down))
             {
-                rayTracer.camera.GetNewAngleY(-22.5f);
+                rayTracer.camera.GetNewAngleY(-0.3f);
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.W))
@@ -84,42 +84,42 @@ namespace Template
                     Console.WriteLine(s.position);
                 }
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.D))
             {
                 rayTracer.camera.position += rayTracer.camera.right_direction;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.S))
             {
                 rayTracer.camera.position -= rayTracer.camera.look_at;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.A))
             {
                 rayTracer.camera.position -= rayTracer.camera.right_direction;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.Space))
             {
                 rayTracer.camera.position += rayTracer.camera.up_direction;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
             if (window.IsKeyPressed(Keys.LeftShift))
             {
                 rayTracer.camera.position -= rayTracer.camera.up_direction;
                 rayTracer.camera.GetPlane();
-                Debug.rayList.Clear();
+                ClearDebugRays();
             }
 
 
@@ -141,6 +141,13 @@ namespace Template
             {
                 debug.DebugOutput();
             }
+        }
+
+        public void ClearDebugRays()
+        {
+            Debug.rayList.Clear();
+            Debug.secondaryRayList.Clear();
+            Debug.shadowRayList.Clear();
         }
     }
 }
