@@ -24,15 +24,15 @@ namespace INFOGR2023Template
         {
             epsilon = .0001f;
             //primitivesList.Add(new Sphere(new Vector3(10, 3, 1), new Vector3(0, 0.5f, 1), new Vector3(0, 0, 0), 1));
-            //primitivesList.Add(new Sphere(new Vector3(5, 2, 2), new Vector3(0, 0, 0.5f), new Vector3(0, 0, 0), 1));
+            primitivesList.Add(new Sphere(new Vector3(5, 2, 2), new Vector3(0, 0, 1f), new Vector3(0, 0, 0), 1));
             //primitivesList.Add(new Sphere(new Vector3(7, 5, 1), new Vector3(0.5f, 1, 0.5f), new Vector3(0, 0, 0), 1));
             //primitivesList.Add(new Sphere(new Vector3(5, 5, -2), new Vector3(1, 0, 1), new Vector3(0, 0, 0), 1));
             //primitivesList.Add(new Sphere(new Vector3(10, 0, -1), new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1));
-            primitivesList.Add(new Sphere(new Vector3(5, 1, 0), new Vector3(0, 0.5f, 1), new Vector3(0, 0, 0), 1, 100));
+            primitivesList.Add(new Sphere(new Vector3(5, 1, 0), new Vector3(1, 1, 1), new Vector3(0, 0, 0), 1, 100));
             testVector = new Vector3(0, 1, 0);
             testVector.Normalize();
             primitivesList.Add(new Plane(new Vector3(3, -1, 0), new Vector3(0.7f, 0.7f, 0.7f), new Vector3(5, 5, 0), testVector));
-            lightsList.Add(new Light(new Vector3(5, 2, 0), new Vector3(5, 5, 5)));
+            lightsList.Add(new Light(new Vector3(6, 2, 3), new Vector3(2, 2, 2)));
 
         }
 
@@ -60,7 +60,7 @@ namespace INFOGR2023Template
                         {
                             if (t1 != t2)
                             {
-                                if ((origin + t1 * direction).Length < (origin + t2 * direction).Length)
+                                if ((t1 * direction).Length < (t2 * direction).Length)
                                 {
                                      Vector3 normal = (t1 * direction) - primitive.position;
                                      intersections.Add(new Intersection(((t1 * direction).Length), primitive, normal, origin + t1 * direction));
@@ -88,7 +88,7 @@ namespace INFOGR2023Template
                     {
                         float t = (-B) / A;
 
-                        Vector3 normal = (( t * direction) - primitive.position);
+                        Vector3 normal = ((t * direction) - primitive.position);
                         intersections.Add(new Intersection(((t * direction).Length), primitive, normal, origin + t * direction));
                     }
                 }

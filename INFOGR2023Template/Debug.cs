@@ -15,6 +15,11 @@ namespace INFOGR2023Template
         RayTracer rayTracer;
         public static List<(Vector2, Vector2)> rayList = new List<(Vector2, Vector2)>();
         public static List<(Vector2, Vector2)> shadowRay = new List<(Vector2, Vector2)>();
+        public static List<(Vector2, Vector2)> secondaryRay = new List<(Vector2, Vector2)>();
+
+        bool showViewRay = true;
+        bool showShadowRay = true;
+        bool showSecondaryRay = false;
 
         public Debug(Surface _screen, RayTracer _rayTracer) 
         {
@@ -42,15 +47,17 @@ namespace INFOGR2023Template
         {
             float scaleX = 1f / 16f * ((float)screen.width / 2f);
             float scaleY = 1f / 10f * ((float)screen.height / 2f);
+            if(showShadowRay)
+                foreach ((Vector2, Vector2) ray in shadowRay)
+                    PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(255, 255, 0));
 
-            foreach ((Vector2, Vector2) ray in shadowRay)
-            {
-                PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(255, 255, 0));
-            }
-            foreach ((Vector2, Vector2) ray in rayList)
-            {
-                PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(0, 255, 255));
-            }
+            if (showViewRay)
+                foreach ((Vector2, Vector2) ray in rayList)
+                    PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(0, 255, 255));
+
+            if (showSecondaryRay)
+                foreach((Vector2, Vector2) ray in secondaryRay)
+                    PlotLine(new Vector2(ray.Item1.X * scaleX, ray.Item1.Y * scaleY), new Vector2(ray.Item2.X * scaleX, ray.Item2.Y * scaleY), new Vector3(125, 0, 255));             
             
             PlotPixel((int)(rayTracer.camera.position.X * scaleX), (int)(rayTracer.camera.position.Z * scaleY), new Vector3(255, 255, 255));
             Console.WriteLine(rayTracer.camera.position);
